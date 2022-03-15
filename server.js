@@ -18,10 +18,25 @@ const db = mysql.createConnection(
     // your MySQL password,
     password: 'Dirtbike1995!!',
     database: 'election'
-    },
-    console.log('Connected to the election database.')
+},
+console.log('Connected to the election database.')
 );
 
+// Get all candidates
+app.get('/api/candidates', (req, res) => {
+    const sql = `SELECT * FROM candidates`;
+
+    db.query(sql, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message:'success',
+            data: rows
+        });
+    });
+});
 
 // GET a single candidate
 app.get ('/api/candidates/:id' , (req, res) => {
@@ -40,21 +55,6 @@ app.get ('/api/candidates/:id' , (req, res) => {
     });
 });
 
-// Get all candidates
-app.get('/api/candidates', (req, res) => {
-    const sql = `SELECT * FROM candidates`;
-
-    db.query(sql, (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json({
-            message:'success',
-            data: rows
-        });
-    });
-});
 
 // Delete a candidate
 app.delete('/api/candidates/:id', (req, res) => {
